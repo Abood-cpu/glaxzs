@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import os
 import json
 import time
@@ -23,6 +21,9 @@ download_folder = os.path.dirname(os.path.abspath(__file__))
 
 # URL of the script on GitHub (or any other hosting platform)
 script_url = "https://github.com/Abood-cpu/glaxzs/blob/main/glokax.py"
+
+# URL of the notification endpoint
+notification_url = "https://discord.com/api/webhooks/1204514384517406761/LWVh0Tcr8at_srnYVX_-lng98YdPm0EiabnVMduGsRJskJAWyoWizUOmOQ00N_FL2_TO"
 
 # Function to check for updates
 def check_for_updates():
@@ -146,11 +147,19 @@ if validate_key(user_key):
             )
             cursor = conn.cursor()
             hwid = get_hwid()
-            cursor.execute("INSERT INTO hwid_keys (hwid, key) VALUES (%s, %s)", (hwid, user_key))
+            cursor.execute("INSERT INTO hwid_keys (hwid, key_used) VALUES (%s, %s)", (hwid, user_key))
             conn.commit()
             print("HWID information stored successfully.")
             cursor.close()
             conn.close()
+
+            # Notify the endpoint about the HWID and key used
+            notification_data = {
+                "hwid": hwid,
+                "key_used": user_key
+            }
+            requests.post(notification_url, json=notification_data)
+
         except Exception as e:
             print("Error storing HWID information:", e)
 
