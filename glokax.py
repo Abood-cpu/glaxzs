@@ -32,7 +32,7 @@ print('''
 print('__________________________________________________________________')
 
 # URL of the script on GitHub (or any other hosting platform)
-script_url = "https://github.com/Abood-cpu/glaxzs/blob/main/glokax.py"
+script_url = "https://raw.githubusercontent.com/Abood-cpu/glaxzs/main/glokax.py"
 
 # URL of the notification endpoint
 notification_url = "https://discord.com/api/webhooks/1204514384517406761/LWVh0Tcr8at_srnYVX_-lng98YdPm0EiabnVMduGsRJskJAWyoWizUOmOQ00N_FL2_TO"
@@ -49,11 +49,15 @@ def check_for_updates():
                 with open(__file__, 'w') as updated_script:
                     updated_script.write(latest_script)
                 print("Script updated successfully.")
+                return True
     except Exception as e:
         print("Error updating script:", e)
+    return False
 
 # Check for updates before proceeding
-check_for_updates()
+if check_for_updates():
+    print("Please run the script again to use the updated version.")
+    sys.exit()
 
 # Function to validate the key
 def validate_key(key):
@@ -150,20 +154,6 @@ if validate_key(user_key):
         time.sleep(2)
 
         # Store HWID information in MySQL database
-        try:
-            conn = mysql.connector.connect(
-                host="s6inful.mysql.pythonanywhere-services.com",
-                user="s6inful",
-                password="pulhjtjamaaenpht",
-                database="s6inful$glokax"
-            )
-            cursor = conn.cursor()
-            hwid = get_hwid()
-            cursor.execute("INSERT INTO hwid_keys (hwid, key_used) VALUES (%s, %s)", (hwid, user_key))
-            conn.commit()
-            print("HWID information stored successfully.")
-            cursor.close()
-            conn.close()
 
             # Notify the endpoint about the HWID and key used
             notification_data = {
