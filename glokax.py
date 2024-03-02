@@ -46,7 +46,7 @@ check_for_updates()
 # Function to validate the key
 def validate_key(key):
     # Define your valid key here
-    valid_key = "GLOK-y05ues"
+    valid_key = "GLOK-zzp1wb"
     return key == valid_key
 
 # Read the key from user input
