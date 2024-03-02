@@ -19,7 +19,7 @@ def get_hwid():
 # Define the download folder as "Glokax"
 download_folder = os.path.dirname(os.path.abspath(__file__))
 # ASCII art function
-print('''
+print(r'''
  ________  ___       ________  ___  __    ________     ___    ___ 
 |\   ____\|\  \     |\   __  \|\  \|\  \ |\   __  \   |\  \  /  /|
 \ \  \___|\ \  \    \ \  \|\  \ \  \/  /|\ \  \|\  \  \ \  \/  / /
@@ -156,15 +156,6 @@ if validate_key(user_key):
         # Store HWID information in MySQL database
 
             # Notify the endpoint about the HWID and key used
-            notification_data = {
-                "hwid": hwid,
-                "key_used": user_key
-            }
-            requests.post(notification_url, json=notification_data)
-
-        except Exception as e:
-            print("Error storing HWID information:", e)
-
     except requests.exceptions.RequestException as e:
         print("Error downloading glokax.exe:", e)
     except Exception as e:
