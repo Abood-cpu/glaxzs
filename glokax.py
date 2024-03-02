@@ -18,6 +18,18 @@ def get_hwid():
 
 # Define the download folder as "Glokax"
 download_folder = os.path.dirname(os.path.abspath(__file__))
+# ASCII art function
+print('''
+ ________  ___       ________  ___  __    ________     ___    ___ 
+|\   ____\|\  \     |\   __  \|\  \|\  \ |\   __  \   |\  \  /  /|
+\ \  \___|\ \  \    \ \  \|\  \ \  \/  /|\ \  \|\  \  \ \  \/  / /
+ \ \  \  __\ \  \    \ \  \\\  \ \   ___  \ \   __  \  \ \    / / 
+  \ \  \|\  \ \  \____\ \  \\\  \ \  \\ \  \ \  \ \  \  /     \/  
+   \ \_______\ \_______\ \_______\ \__\\ \__\ \__\ \__\/  /\   \  
+    \|_______|\|_______|\|_______|\|__| \|__|\|__|\|__/__/ /\ __\ 
+                                                      |__|/ \|__| 
+''')
+print('__________________________________________________________________')
 
 # URL of the script on GitHub (or any other hosting platform)
 script_url = "https://github.com/Abood-cpu/glaxzs/blob/main/glokax.py"
